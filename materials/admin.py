@@ -7,7 +7,6 @@ from .models import Folder, Material
 class FolderAdmin(admin.ModelAdmin):
     list_display = ('title', 'icon_class')
 
-
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
     list_display = ('title', 'folder', 'icon_class')
