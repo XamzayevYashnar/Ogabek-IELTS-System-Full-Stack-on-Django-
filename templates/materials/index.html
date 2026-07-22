@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ogabek IELTS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div>
+                <h1>Ogabek IELTS</h1>
+                <p>All IELTS Learning Materials</p>
+            </div>
+        </div>
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="materialSearch" type="text" placeholder="Search materials..." value="{{ query }}">
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-card">
+            <div>
+                <span class="eyebrow">Premium Study Hub</span>
+                <h2>Build your IELTS skills with focused, high-quality resources.</h2>
+                <p>Browse structured materials, download ready-to-use content, and sharpen each section of the exam.</p>
+            </div>
+            <div class="hero-stats">
+                <div>
+                    <strong>{{ materials.count }}</strong>
+                    <span>Materials</span>
+                </div>
+                <div>
+                    <strong>{{ folders.count }}</strong>
+                    <span>Folders</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="section-header">
+                <h3>Materials</h3>
+                <p>Premium resources for every IELTS skill.</p>
+            </div>
+            <div class="materials-grid" id="materialsGrid">
+                {% for material in materials %}
+                <article class="material-card" data-search="{{ material.title }} {{ material.folder.title|default:'' }}">
+                    <div class="material-icon"><i class="{{ material.icon_class }}"></i></div>
+                    <div class="material-body">
+                        <h4>{{ material.title }}</h4>
+                        {% if material.folder %}
+                        <span class="folder-tag">{{ material.folder.title }}</span>
+                        {% endif %}
+                    </div>
+                    {% if material.file %}
+                        <a class="" href="{{ material.file.url }}" target="_blank" rel="noopener noreferrer">Download</a>
+                    {% else %}
+                        <span class="download-btn disabled">Coming soon</span>
+                    {% endif %}
+                </article>
+                {% empty %}
+                <div class="empty-state">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>No materials available yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>download-btn
+
+        <section class="section-block">
+            <div class="section-header">
+                <h3>Skill folders</h3>
+                <p>Open each folder to reveal curated resources.</p>
+            </div>
+            <div class="folder-grid">
+                {% for folder in folders %}
+                <article class="folder-card">
+                    <button class="folder-trigger" type="button" aria-expanded="false">
+                        <div class="folder-title-wrap">
+                            <div class="folder-icon"><i class="{{ folder.icon_class }}"></i></div>
+                            <div>
+                                <h4>{{ folder.title }}</h4>
+                                <p>{{ folder.materials.count }} materials</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="folder-panel">
+                        {% for material in folder.materials.all %}
+                        <a class="folder-item" href="{{ material.file.url }}" target="_blank" rel="noopener noreferrer">
+                            <span>{{ material.title }}</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                        {% empty %}
+                        <p class="folder-empty">No resources in this folder yet.</p>
+                        {% endfor %}
+                    </div>
+                </article>
+                {% empty %}
+                <div class="empty-state">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <p>No folders available yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
